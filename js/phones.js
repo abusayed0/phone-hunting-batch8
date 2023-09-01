@@ -1,29 +1,31 @@
 console.log("js/phones.js");
 
-const loadPhones = async(phoneName) =>{
+let presentSearch;
 
+const loadPhones = async(phoneName, showAll) =>{
+    presentSearch = phoneName;
    toggleHidden("loading-container", true);
     const url = `https://openapi.programming-hero.com/api/phones?search=${phoneName}`;
     const res = await fetch(url);
     const data = await res.json();
     const phones = data.data;
-    displayPhones(phones);
+    displayPhones(phones, showAll);
 };
 
-const displayPhones = (phonesData) => {
+const displayPhones = (phonesData, showAll) => {
 
     const phonesContainer = document.getElementById("phones-container");
     phonesContainer.innerHTML = "";
     let showPhones = phonesData;
     // display first 10 phone
-    if(phonesData.length > 12){
-        console.log(showPhones.length);
+    if(phonesData.length > 12 && !showAll){
         showPhones = phonesData.slice(0, 12);
         toggleHidden("show-btn-container", true);
     }
     else{
         toggleHidden("show-btn-container", false);
     }
+
     toggleHidden("loading-container", false);
 
         showPhones.forEach(phoneData => {
@@ -48,7 +50,7 @@ const displayPhones = (phonesData) => {
 const handleSearch = () => {
     const inputField = document.getElementById("input-field");
     const searchPhone = inputField.value;
-    loadPhones(searchPhone);
+    loadPhones(searchPhone, false);
 }
 
 const toggleHidden = (elementId, remove) => {
@@ -60,4 +62,8 @@ const toggleHidden = (elementId, remove) => {
         element.classList.add("hidden");
     }
 };
-loadPhones("iphone");
+
+const handleShowAll = () => {
+    loadPhones(presentSearch, true);
+}
+loadPhones("iphone", false);
