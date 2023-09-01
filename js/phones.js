@@ -11,7 +11,19 @@ const loadPhones = async(phoneName) =>{
 const displayPhones = (phonesData) => {
     const phonesContainer = document.getElementById("phones-container");
     phonesContainer.innerHTML = "";
-    phonesData.forEach(phoneData => {
+    let showPhones = phonesData;
+    // display first 10 phone
+    const showAllBtn = document.getElementById("show-btn-container");
+    if(phonesData.length > 12){
+        console.log(showPhones.length);
+        showPhones = phonesData.slice(0, 12);
+        showAllBtn.classList.remove("hidden");
+    }
+    else{
+        showAllBtn.classList.add("hidden");
+    }
+   
+        showPhones.forEach(phoneData => {
         const {phone_name, image, brand} = phoneData;
         const newDiv = document.createElement("div");
         newDiv.classList.add("card", "bg-gray-100", "shadow-xl");
